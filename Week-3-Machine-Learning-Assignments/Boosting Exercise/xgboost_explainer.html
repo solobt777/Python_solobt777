@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XGBoost: Step-by-Step Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .step {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 15px;
+        }
+
+        .step-title {
+            display: inline-block;
+            color: #333;
+            font-size: 1.5em;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        .step-content {
+            margin-top: 15px;
+            padding-left: 55px;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            overflow-x: auto;
+        }
+
+        .key-concepts {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 5px solid #ffc107;
+        }
+
+        .key-concepts h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .concept-list {
+            padding-left: 20px;
+        }
+
+        .concept-list li {
+            margin-bottom: 10px;
+        }
+
+        .advantages {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 5px solid #28a745;
+        }
+
+        .advantages h3 {
+            color: #155724;
+            margin-bottom: 15px;
+        }
+
+        .note {
+            background: #d1ecf1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #17a2b8;
+            font-style: italic;
+        }
+
+        strong {
+            color: #667eea;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>XGBoost</h1>
+            <p>eXtreme Gradient Boosting - A Complete Guide</p>
+        </div>
+
+        <div class="content">
+            <div class="intro">
+                <h2>What is XGBoost?</h2>
+                <p>XGBoost (eXtreme Gradient Boosting) is an optimized distributed gradient boosting library designed to be highly efficient, flexible, and portable. It implements machine learning algorithms under the Gradient Boosting framework and has become one of the most popular algorithms in competitive machine learning.</p>
+            </div>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                <h3 class="step-title">Initialize with a Base Prediction</h3>
+                <div class="step-content">
+                    <p>XGBoost starts by making an initial prediction, typically the mean of the target values for regression or log-odds for classification.</p>
+                    <div class="formula">
+                        F₀(x) = initial_prediction (e.g., mean of y)
+                    </div>
+                    <p>This serves as the starting point for all subsequent improvements.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                <h3 class="step-title">Calculate Residuals (Gradients)</h3>
+                <div class="step-content">
+                    <p>For each training example, calculate the difference between the actual value and the current prediction. These are called residuals or pseudo-residuals.</p>
+                    <div class="formula">
+                        residual_i = y_i - F₀(x_i)
+                    </div>
+                    <p>In XGBoost, these residuals represent the negative gradient of the loss function with respect to predictions.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                <h3 class="step-title">Build a Decision Tree on Residuals</h3>
+                <div class="step-content">
+                    <p>XGBoost builds a decision tree to predict these residuals. The tree is grown using a greedy algorithm that splits nodes based on maximizing a gain metric.</p>
+                    <div class="formula">
+                        Gain = ½ [GL²/(HL+λ) + GR²/(HR+λ) - (GL+GR)²/(HL+HR+λ)] - γ
+                    </div>
+                    <p>Where:</p>
+                    <ul class="concept-list">
+                        <li><strong>GL, GR</strong>: Sum of gradients in left and right nodes</li>
+                        <li><strong>HL, HR</strong>: Sum of hessians (second derivatives) in left and right nodes</li>
+                        <li><strong>λ</strong>: L2 regularization parameter</li>
+                        <li><strong>γ</strong>: Minimum loss reduction required for a split</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                <h3 class="step-title">Calculate Leaf Weights</h3>
+                <div class="step-content">
+                    <p>For each leaf node in the tree, XGBoost calculates an optimal weight using both first and second derivatives of the loss function.</p>
+                    <div class="formula">
+                        w = -G / (H + λ)
+                    </div>
+                    <p>Where:</p>
+                    <ul class="concept-list">
+                        <li><strong>G</strong>: Sum of gradients for samples in the leaf</li>
+                        <li><strong>H</strong>: Sum of hessians for samples in the leaf</li>
+                        <li><strong>λ</strong>: Regularization parameter</li>
+                    </ul>
+                    <div class="note">
+                        Note: Using second derivatives (Hessian) is what makes XGBoost more accurate than traditional gradient boosting, which only uses first derivatives.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                <h3 class="step-title">Update Predictions with Learning Rate</h3>
+                <div class="step-content">
+                    <p>Add the new tree's predictions to the existing model, scaled by a learning rate (η) to prevent overfitting.</p>
+                    <div class="formula">
+                        F_m(x) = F_{m-1}(x) + η · tree_m(x)
+                    </div>
+                    <p>The learning rate (typically 0.01 to 0.3) controls how much each tree contributes to the final prediction. Lower values require more trees but often generalize better.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">6</span>
+                <h3 class="step-title">Repeat the Process</h3>
+                <div class="step-content">
+                    <p>Steps 2-5 are repeated for a specified number of iterations (trees) or until performance stops improving on a validation set.</p>
+                    <p>Each new tree focuses on correcting the errors of the combined ensemble of all previous trees.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <span class="step-number">7</span>
+                <h3 class="step-title">Final Prediction</h3>
+                <div class="step-content">
+                    <p>The final prediction is the sum of the initial prediction and all tree predictions, each scaled by the learning rate.</p>
+                    <div class="formula">
+                        Final_Prediction = F₀(x) + η·tree₁(x) + η·tree₂(x) + ... + η·tree_n(x)
+                    </div>
+                </div>
+            </div>
+
+            <div class="key-concepts">
+                <h3>Key Technical Features</h3>
+                <ul class="concept-list">
+                    <li><strong>Second-order Optimization:</strong> Uses both gradients and Hessians for more accurate updates</li>
+                    <li><strong>Regularization:</strong> Built-in L1 (alpha) and L2 (lambda) regularization to prevent overfitting</li>
+                    <li><strong>Sparsity Awareness:</strong> Handles missing values automatically by learning default directions</li>
+                    <li><strong>Parallel Processing:</strong> Parallelizes tree construction for faster training</li>
+                    <li><strong>Tree Pruning:</strong> Uses depth-first approach with max_depth and prunes backward using gamma</li>
+                    <li><strong>Column Subsampling:</strong> Randomly samples features for each tree (like Random Forest)</li>
+                    <li><strong>Cache Optimization:</strong> Efficient data structures and cache-aware access patterns</li>
+                </ul>
+            </div>
+
+            <div class="advantages">
+                <h3>Why XGBoost is Powerful</h3>
+                <ul class="concept-list">
+                    <li>Handles various types of data and loss functions</li>
+                    <li>Excellent performance on structured/tabular data</li>
+                    <li>Built-in cross-validation and early stopping</li>
+                    <li>Feature importance calculation</li>
+                    <li>Highly customizable with many hyperparameters</li>
+                    <li>Winner of numerous Kaggle competitions</li>
+                    <li>Production-ready with various language bindings</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>XGBoost combines gradient boosting with advanced optimization techniques to create one of the most powerful machine learning algorithms available today.</p>
+        </div>
+    </div>
+</body>
+</html>
