@@ -1,7 +1,7 @@
 from py_compile import main
 
 
-class UnivariateCls:
+class Univariate:
     def __init__(self, dataframe):
         self.dataframe = dataframe
 
@@ -15,5 +15,5 @@ class UnivariateCls:
                 quantitative.append(column)
         return quantitative, qualitative
     
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
